@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Městská hra Liberec</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background-color: #f9f9f9;
+    }
+
+    input {
+      display: block;
+      margin-bottom: 10px;
+      padding: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .correct {
+      border-color: green;
+      background-color: #e8ffe8;
+    }
+
+    .incorrect {
+      border-color: red;
+      background-color: #ffe8e8;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    iframe {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      border: none;
+    }
+
+    #form-section, #end-video {
+      display: none;
+      margin-top: 30px;
+    }
+
+    #result {
+      font-size: 18px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🛸 Liberecká výzva</h1>
+  
+  <!-- Úvodní video s tlačítkem -->
+  <div id="intro-video">
+    <p>Podívej se na úvodní video:</p>
+    <iframe src="https://www.youtube.com/embed/iNzmxKs-05w" allowfullscreen></iframe>
+    <button onclick="showForm()">Pokračovat</button>
+  </div>
+
+  <!-- FORMULÁŘ -->
+  <div id="form-section">
+    <p>Zadej správné odpovědi na všechny úkoly:</p>
+
+    <label for="answer1">Jak se jmenuje výstava v technickém muzeu v Liberci, která bude 12.6. - 30.9.2025?</label>
+    <input type="text" id="answer1" placeholder="">
+
+    <label for="answer2">Kolik stojí velká plzeň v Labském zámku?</label>
+    <input type="text" id="answer2" placeholder="xx Kč">
+
+    <label for="answer3">Jaká budova Technicke Univerzity je označena písmenem D?</label>
+    <input type="text" id="answer3" placeholder="Fakulta xxxxx">
+
+    <label for="answer4">Kdy bylo založeno Fryčovo knihkupectví?</label>
+    <input type="text" id="answer4" placeholder="rok">
+
+    <label for="answer5">Jaké číslo má tramvaj, která je za Technickým muzeem v Liberci?</label>
+    <input type="text" id="answer5" placeholder="">
+
+    <label for="answer6">Kdo je tvůrce Sedícího čerta, který se nachází před Galerií Lázně?</label>
+    <input type="text" id="answer6" placeholder="">
+
+    <label for="answer7">Najdi ještěrku u parku Technického muzea a napiš její celý název: </label>
+    <input type="text" id="answer7" placeholder="">
+
+    <label for="answer8">Jak se jmenuje divadelní klub, který je vedle divadla F.X. Šaldy? </label>
+    <input type="text" id="answer8" placeholder="">
+
+    <label for="answer9">Jaká je registrační značka vozu BMW, na místě Za humny, kterému byla podána vyzva k odstranění z důvodu, pro který nesmí být vozidlo provozováno na pozemních komunikacích? </label>
+    <input type="text" id="answer9" placeholder="ČPČ ČČČČ">
+
+    <label for="answer10"> Jaká je výška hlavní věže radnice?</label>
+    <input type="text" id="answer10" placeholder="XXm">
+
+    <label for="answer11">Kdy vás obslouži Božena Němcová ve Fryčove knihkupectví? </label>
+    <input type="text" id="answer11" placeholder="">
+
+    <label for="answer12">Jaké město má na poklopu do kanalizace draka?</label>
+    <input type="text" id="answer12" placeholder="">
+
+    <label for="answer13">Jak se jmenuje bistro před nemocnicí?</label>
+    <input type="text" id="answer13" placeholder="">
+
+    <label for="answer14">Kde končí linka čislo 15?</label>
+    <input type="text" id="answer14" placeholder="">
+
+    <label for="answer15">Kolik stojí nepřenosná časová jízdenka pro relaci liberec - Jablonec zlevněná sedmidenní?</label>
+    <input type="text" id="answer15" placeholder="xxx Kč">
+
+
+    <button onclick="checkAnswers()">Ověřit odpovědi</button>
+    <div id="result"></div>
+  </div>
+
+  <!-- Závěrečné video -->
+  <div id="end-video">
+    <h2>🎉 Gratuluji!</h2>
+    <iframe src="https://www.youtube.com/embed/DkHbjgtFKbs" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    function showForm() {
+      document.getElementById("intro-video").style.display = "none";
+      document.getElementById("form-section").style.display = "block";
+    }
+
+    const correctAnswers = [
+      "S HLAVOU V OBLACÍCH",
+      "69 Kč",
+      "Fakulta Textilní",
+      "1990",
+      "45",
+      "Jaroslav Róna",
+      "Obrněný transportér PLDvK vz. 53/59",
+      "JIMMy’s",
+      "6P4 4848",
+      "65m",
+      "Každé pondělí",
+      "LJUBLJANA",
+      "Na husovce",
+      "Lukášovské údolí",
+      "132 Kč"
+    ];
+
+    function normalize(str) {
+      return str.trim().toLowerCase();
+    }
+
+    function checkAnswers() {
+      let allCorrect = true;
+
+      for (let i = 0; i < correctAnswers.length; i++) {
+        const input = document.getElementById(`answer${i + 1}`);
+        const userAnswer = normalize(input.value);
+        const correct = normalize(correctAnswers[i]);
+
+        if (userAnswer === correct) {
+          input.classList.add("correct");
+          input.classList.remove("incorrect");
+        } else {
+          input.classList.add("incorrect");
+          input.classList.remove("correct");
+          allCorrect = false;
+        }
+      }
+
+      const resultDiv = document.getElementById("result");
+
+      if (allCorrect) {
+        resultDiv.textContent = "✅ Všechny odpovědi jsou správně!";
+        document.getElementById("end-video").style.display = "block";
+      } else {
+        resultDiv.textContent = "❌ Některé odpovědi nejsou správně. Zkus to znovu.";
+        document.getElementById("end-video").style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
